@@ -8,6 +8,7 @@
             alg.FirstEx();
             alg.SecondEx();
             alg.ThirdyEx();
+            Console.ReadKey();
         }
     }
 }
