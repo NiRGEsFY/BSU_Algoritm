@@ -102,5 +102,52 @@ namespace ConsoleApp1
             }
         }
 
+        public void ThirdyEx()
+        {
+            Console.WriteLine("Разработать следующие алгоритмы и программы с \r\nиспользованием рекурсии\n" +
+                              "7.Перевода целого числа, введенного с клавиатуры, в двоичную \r\nсистему счисления.\r\n");
+            Console.Write("Введите число: ");
+            int input = 0;
+            if (!int.TryParse(Console.ReadLine(),out input))
+            {
+                Console.WriteLine("Введенно не корректное число");
+                return;
+            }
+            Console.WriteLine($"Число в бинарной системе исчисления: {BinaryParse(input)}");
+            
+        }
+        public int BinaryParse(int input)
+        {
+            int mult = 0;
+            int divider = 1;
+            while (divider < input)
+            {
+                divider *= 2;
+                mult++;
+                if (input == divider)
+                {
+                    divider = 1;
+                    for (int i = 0; i < mult; i++)
+                    {
+                        divider *= 10;
+                    }
+                    return divider;
+                }
+            }
+            divider /= 2;
+            mult--;
+            int output = 0;
+            if (input > 1)
+            {
+                output += BinaryParse(input - divider);
+                divider = 1;
+                for (int i = 0; i < mult; i++)
+                {
+                    divider *= 10;
+                }
+                return divider + output;
+            }
+            return input;
+        }
     }
 }

@@ -5,7 +5,9 @@
         static void Main(string[] args)
         {
             Algoritm alg = new Algoritm();
+            alg.FirstEx();
             alg.SecondEx();
+            alg.ThirdyEx();
         }
     }
 }
