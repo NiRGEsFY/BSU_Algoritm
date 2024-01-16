@@ -8,6 +8,8 @@ namespace ConsoleApp1
 {
     public class Algoritm
     {
+        Sorting sorter = new Sorting();
+        
         public void FirstEx()
         {
             Console.WriteLine("8.Составить программу, которая формирует матрицу из\r\n" +
@@ -39,7 +41,6 @@ namespace ConsoleApp1
                               $"Сумма чисел = {sum}\n" +
                               $"Время выполнения: {startTime.Elapsed.TotalMilliseconds} мс");
         }
-
         public void SecondEx()
         {
             Console.WriteLine("3.Разработать алгоритм и программу дихотомического поиска. В\r\n" +
@@ -58,7 +59,7 @@ namespace ConsoleApp1
                     break;
                 }
                 lenght++;
-                int.TryParse(readingField,out input);
+                int.TryParse(readingField, out input);
                 Array.Resize(ref array, lenght);
                 array[lenght - 1] = input;
             }
@@ -66,88 +67,79 @@ namespace ConsoleApp1
                           "Ввод: ");
             int.TryParse(Console.ReadLine(), out input);
             Array.Sort(array);
-            var searchDigit = Algoritm.BinarySearch(array, input, 0, array.Length);
+            var searchDigit = Sorting.BinarySearch(array, input, 0, array.Length);
             if (searchDigit < 0)
             {
-                Console.WriteLine("Элемент со значение {0} не найден",input);
+                Console.WriteLine("Элемент со значение {0} не найден", input);
             }
             else
             {
-                Console.WriteLine("Элемент со значение {0} найден, с индексом {1}",input,searchDigit);
+                Console.WriteLine("Элемент со значение {0} найден, с индексом {1}", input, searchDigit);
             }
         }
-        static int BinarySearch(int[] array, int searchedValue, int first, int last)
-        {
-            if (first > last)
-            {
-                return -1;
-            }
-            var middle = (first + last) / 2;
-            var middleValue = array[middle];
-
-            if (middleValue == searchedValue)
-            {
-                return middle;
-            }
-            else
-            {
-                if (middleValue > searchedValue)
-                {
-                    return BinarySearch(array, searchedValue, first, middle - 1);
-                }
-                else
-                {
-                    return BinarySearch(array, searchedValue, middle + 1, last);
-                }
-            }
-        }
-
         public void ThirdyEx()
         {
             Console.WriteLine("Разработать следующие алгоритмы и программы с \r\nиспользованием рекурсии\n" +
                               "7.Перевода целого числа, введенного с клавиатуры, в двоичную \r\nсистему счисления.\r\n");
             Console.Write("Введите число: ");
             int input = 0;
-            if (!int.TryParse(Console.ReadLine(),out input))
+            if (!int.TryParse(Console.ReadLine(), out input))
             {
                 Console.WriteLine("Введенно не корректное число");
                 return;
             }
-            Console.WriteLine($"Число в бинарной системе исчисления: {BinaryParse(input)}");
-            
+            Console.WriteLine($"Число в бинарной системе исчисления: {sorter.BinaryParse(input)}");
+
         }
-        public int BinaryParse(int input)
+        public void ForthyEx()
         {
-            int mult = 0;
-            int divider = 1;
-            while (divider < input)
+            Random rand = new Random();
+            for (int i = 1000; i < 11000; i += 1000)
             {
-                divider *= 2;
-                mult++;
-                if (input == divider)
+                int[] array = new int[i];
+                for (int j = 0; j < i; j++)
                 {
-                    divider = 1;
-                    for (int i = 0; i < mult; i++)
-                    {
-                        divider *= 10;
-                    }
-                    return divider;
+                    array[j] = rand.Next(1000);
                 }
+                double totalTime = 0;
+                for (int j = 0; j < 3; j++)
+                {
+                    var startTime = System.Diagnostics.Stopwatch.StartNew();
+                    sorter.QuickSort(array);
+                    startTime.Stop();
+                    totalTime += startTime.Elapsed.TotalMilliseconds;
+                }
+                Console.WriteLine($"Быстрая сортировка\n" +
+                                  $"Количество элементов: {i}\n" +
+                                  $"Время выполнения: {totalTime / 3} мс");
+                totalTime = 0;
+                for (int j = 0; j < 3; j++)
+                {
+                    var startTime = System.Diagnostics.Stopwatch.StartNew();
+                    sorter.BubbleSort(array);
+                    startTime.Stop();
+                    totalTime += startTime.Elapsed.TotalMilliseconds;
+                }
+                Console.WriteLine($"Пузырьковая сортировка\n" +
+                                  $"Количество элементов: {i}\n" +
+                                  $"Время выполнения: {totalTime / 3} мс");
             }
-            divider /= 2;
-            mult--;
-            int output = 0;
-            if (input > 1)
+
+        }
+
+        public void FivethyEx()
+        {
+            BinaryTree<int> tree = new BinaryTree<int>(90);
+            Random rand = new Random();
+            for (int i = 0; i < 20; i++)
             {
-                output += BinaryParse(input - divider);
-                divider = 1;
-                for (int i = 0; i < mult; i++)
-                {
-                    divider *= 10;
-                }
-                return divider + output;
+                tree.Insert(rand.Next(0,181));
             }
-            return input;
+            BinaryTree<int> treeB = new BinaryTree<int>(90);
+            for (int i = 0; i < 20; i++)
+            {
+                treeB.Insert(rand.Next(0, 181));
+            }
         }
     }
 }
