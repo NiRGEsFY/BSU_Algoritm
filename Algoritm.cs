@@ -126,7 +126,6 @@ namespace ConsoleApp1
             }
 
         }
-
         public void FivethyEx()
         {
             BinaryTree<int> tree = new BinaryTree<int>(90);

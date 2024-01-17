@@ -6,7 +6,7 @@
         {
             Algoritm alg = new Algoritm();
             Graph gr = new Graph();
-            gr.FirstKR();
+            gr.Start(20);
             Console.ReadKey();
         }
     }
