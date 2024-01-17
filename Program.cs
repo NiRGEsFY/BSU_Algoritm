@@ -5,7 +5,8 @@
         static void Main(string[] args)
         {
             Algoritm alg = new Algoritm();
-            alg.FivethyEx();
+            Graph gr = new Graph();
+            gr.FirstKR();
             Console.ReadKey();
         }
     }

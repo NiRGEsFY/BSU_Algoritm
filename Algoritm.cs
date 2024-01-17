@@ -9,20 +9,7 @@ namespace ConsoleApp1
     public class Algoritm
     {
         Sorting sorter = new Sorting();
-        
-        public void FirstKR()
-        {
-            int lenght = 5;
-            Point[,] graph = new Point[lenght, lenght];
-            for (int i = 0;i < lenght;i++ )
-            {
-                graph[i, 0] = new Point("border");
-                graph[0, i] = new Point("border");
-                graph[i, lenght] = new Point("border");
-                graph[lenght, i] = new Point("border");
-            }
 
-        }
         public void FirstEx()
         {
             Console.WriteLine("8.Составить программу, которая формирует матрицу из\r\n" +
