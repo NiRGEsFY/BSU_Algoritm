@@ -144,13 +144,15 @@ namespace ConsoleApp1
                     graph[point.X, point.Y - 1].Visit = false;
                 }
             }
+
+
             
             return 0;
         }
         public void FirstKR()
         {
             startPoints = new List<Point>();
-            lenght = 30;
+            lenght = 15;
             graph = new Point[lenght, lenght];
             FillGraph();
             PrintGraph();
