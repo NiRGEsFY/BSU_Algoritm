@@ -10,6 +10,7 @@ namespace ConsoleApp1
     public class Graph
     {
         Random rand = new Random();
+        List<Point> startPoints;
         Point[,] graph;
         int lenght;
         private void FillGraph()
@@ -34,17 +35,19 @@ namespace ConsoleApp1
                 {
                     if (rand.Next(0, 5) == 1)
                     {
-                        graph[i, j] = new Point("wall",i,j);
+                        graph[i, j] = new Point("wall", i, j);
                     }
                 }
             }
-            int port = rand.Next(1, lenght / 2);
+            int port = 1 + rand.Next(0,lenght/2);
             for (int i = 0; i < port; i++)
             {
-                int exit = rand.Next(1, lenght);
-                int enter = rand.Next(1, lenght);
+                int exit = rand.Next(1, lenght-1);
+                int enter = rand.Next(1, lenght-1);
                 graph[0, exit] = new Point("exit",0,exit);
-                graph[lenght - 1, enter] = new Point("enter",lenght-1,enter);
+                Point enterPoint = new Point("enter", lenght - 1, enter);
+                startPoints.Add(enterPoint);
+                graph[lenght - 1, enter] = enterPoint;
             }
         }
         private void PrintGraph()
@@ -57,8 +60,16 @@ namespace ConsoleApp1
                     {
                         case null:
                         case "point":
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                            Console.Write('*');
+                            if (graph[i,j].Visit == true)
+                            {
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.Write('*');
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Blue;
+                                Console.Write('*');
+                            }
                             break;
                         case "wall":
                         case "border":
@@ -78,46 +89,82 @@ namespace ConsoleApp1
                 }
                 Console.WriteLine();
             }
+            Console.ForegroundColor = ConsoleColor.White;
         }
-        static int minWay;
-        public List<Point> WayFinder(Point point, int lenght)
+        public int WayFinder(Point point, int lenght)
         {
-            List<Point> list = new List<Point>();
+            if (graph[point.X, point.Y + 1].Status == "exit")
+            {
+                return lenght;
+            }
+            if (graph[point.X, point.Y - 1].Status == "exit")
+            {
+                return lenght;
+            }
+            if (graph[point.X - 1, point.Y].Status == "exit")
+            {
+                return lenght;
+            }
+            if (!graph[point.X - 1, point.Y].Visit && graph[point.X - 1, point.Y].Status == "point")
+            {
+                graph[point.X - 1, point.Y].Visit = true;
+                lenght = WayFinder(graph[point.X - 1, point.Y], ++lenght);
+                if (lenght > 0)
+                {
+                    return lenght;
+                }
+                else
+                {
+                    graph[point.X - 1, point.Y].Visit = false;
+                }
+            }
             if (!graph[point.X, point.Y + 1].Visit && graph[point.X, point.Y + 1].Status == "point")
             {
-                WayFinder(graph[point.X, point.Y + 1], ++lenght);
+                graph[point.X, point.Y + 1].Visit = true;
+                lenght = WayFinder(graph[point.X, point.Y + 1], ++lenght);
+                if (lenght > 0)
+                {
+                    return lenght;
+                }
+                else
+                {
+                    graph[point.X, point.Y + 1].Visit = false;
+                }
             }
-            if (!graph[point.X-1,point.Y].Visit && graph[point.X - 1, point.Y].Status == "point")
+            if (!graph[point.X, point.Y - 1].Visit && graph[point.X, point.Y - 1].Status == "point")
             {
-                WayFinder(graph[point.X - 1, point.Y], ++lenght);
+                graph[point.X, point.Y - 1].Visit = true;
+                lenght = WayFinder(graph[point.X, point.Y - 1], ++lenght);
+                if (lenght > 0)
+                {
+                    return lenght;
+                }
+                else
+                {
+                    graph[point.X, point.Y - 1].Visit = false;
+                }
             }
-            if (!graph[point.X + 1, point.Y].Visit && graph[point.X + 1, point.Y].Status == "point")
-            {
-                WayFinder(graph[point.X + 1, point.Y], ++lenght);
-            }
-            if (graph[point.X, point.Y + 1].Status == "enter")
-            {
-
-            }
-            if (graph[point.X - 1, point.Y].Status == "enter")
-            {
-
-            }
-            if (graph[point.X + 1, point.Y].Status == "enter")
-            {
-
-            }
-            return new Point();
+            
+            return 0;
         }
-
         public void FirstKR()
         {
+            startPoints = new List<Point>();
             lenght = 30;
             graph = new Point[lenght, lenght];
             FillGraph();
             PrintGraph();
-            minWay = lenght * lenght;
+            int counter = 0;
+            foreach (var item in startPoints)
+            {
 
+                if (WayFinder(item, 0) > 0)
+                {
+                    counter++;
+                }
+            }
+            Console.WriteLine(counter);
+            PrintGraph();
         }
     }
 
